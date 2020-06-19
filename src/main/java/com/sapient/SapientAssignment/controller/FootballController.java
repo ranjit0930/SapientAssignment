@@ -3,10 +3,11 @@ package com.sapient.SapientAssignment.controller;
 import com.sapient.SapientAssignment.model.Country;
 import com.sapient.SapientAssignment.service.FootballService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +18,15 @@ public class FootballController {
     private FootballService footballService;
 
     @GetMapping("/teamStandings")
-    public String fetchTeamStanding(@RequestParam String countryName,@RequestParam String leagueName,@RequestParam String teamName){
-      return footballService.getOverallStandingResponse(countryName,leagueName,teamName);
+    public ResponseEntity<String> fetchTeamStanding(@RequestParam(required = true) String countryName, @RequestParam(required = true) String leagueName, @RequestParam(required = true) String teamName){
+
+        try {
+            String details = footballService.getOverallStandingResponse(countryName,leagueName,teamName);
+            return StringUtils.isEmpty(details)? ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Content Found"): ResponseEntity.status(HttpStatus.OK).body(details);
+        }
+        catch(Exception ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+        }
+
     }
 }
