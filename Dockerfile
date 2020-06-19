@@ -1,4 +1,4 @@
 FROM openjdk:8
-ADD /target/SapientAssingment.jar SapientAssignment.jar
+ADD /target/SapientAssignment.jar SapientAssignment.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","SapientAssignment.jar"]
