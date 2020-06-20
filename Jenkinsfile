@@ -17,12 +17,12 @@ pipeline {
       }
       stage('Build') {
               steps {
-                  mvn 'clean install -DskipTests'
+                  sh mvn 'clean install -DskipTests'
               }
       }
       stage('Unit Test') {
               steps {
-                  mvn 'test'
+                  sh mvn 'test'
               }
               post {
               // If Maven was able to run the tests, even if some of the test
