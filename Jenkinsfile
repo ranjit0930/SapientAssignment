@@ -1,6 +1,11 @@
 pipeline {
    agent any
 
+   environment {
+       registry = "ranjit0930/sapient-assignment-repository"
+       registryCredential = 'docker_id'
+       dockerImage = ''
+   }
    tools {
       maven "MAVEN"
    }
@@ -27,5 +32,23 @@ pipeline {
               }
            }
       }
+      //Docker Build and Push
+      stage('Docker Build') {
+          steps{
+              script {
+              dockerImage = docker.build registry + ":$BUILD_NUMBER"
+              }
+          }
+      }
+      stage('Docker Push') {
+          steps{
+              script {
+              docker.withRegistry( '', registryCredential ) {
+              dockerImage.push()
+              }
+          }
+      }
+      }
+      //
    }
 }
